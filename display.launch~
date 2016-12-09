@@ -42,14 +42,14 @@
 	<remap from="scan" to="$(arg laser_topic)"/>
     </node>
 
-    
+    <!--
     <node pkg="dn_object_detect" type="dn_object_detect" name="dn_object_detect" output="screen">
     	<param name="camera" type="str" value="/camera/rgb/image_rect_color"/>
     	<param name="_image_transport" type="str" value="compressed"/>
     	<param name="yolo_config" type="str" value="/home/adllo/catkin_ws/src/dn_object_detect/darknet/cfg/yolo-tiny_2_more.cfg"/>
     	<param name="yolo_model" type="str" value="/home/adllo/catkin_ws/src/dn_object_detect/darknet/my_weights/yolo-tiny_2_more_final.weights"/>
     </node>
-    
+    -->
 
     <node name="door_handle_RGBD_cropped_creator" pkg="door_detection" type="RGBD_cropped_creator"/>
     <node name="door_handle_RGBD_method" pkg="door_detection" type="RGBD_method"/>
