@@ -1,0 +1,62 @@
+<launch>
+
+ 
+     <node name="map_server" pkg="map_server" type="map_server" args="/home/adllo/catkin_ws/src/smr_launch/maps/map_full.yaml"/>
+ 	  	
+    <arg name="odom_frame_id"   default="odom"/>
+    <arg name="base_frame_id"   default="base_link"/>
+    <arg name="global_frame_id" default="map"/>
+    <arg name="odom_topic" default="odom" />
+    <arg name="laser_topic" default="base_scan" />
+
+    <arg name="rgb_camera_info_url"
+        value="/home/adllo/catkin_ws/src/smr_launch/param/rgb.yaml" />
+    <arg name="depth_camera_info_url"
+        value="/home/adllo/catkin_ws/src/smr_launch/param/depth.yaml" />
+
+    <arg name="model" />
+    <arg name="gui" default="False" />
+    <param name="robot_description" textfile="/home/adllo/catkin_ws/src/smr_launch/urdf/smr.urdf" />
+    <param name="use_gui" value="$(arg gui)"/>
+
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+        
+    <node name="location" pkg="amcl" type="amcl" args="scan:=base_scan" />   
+   
+    <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+	<rosparam file="param/costmap_common_params.yaml" command="load" ns="global_costmap" />
+	<rosparam file="param/costmap_common_params.yaml" command="load" ns="local_costmap" />   
+	<rosparam file="param/local_costmap_params.yaml" command="load" />   
+	<rosparam file="param/global_costmap_params.yaml" command="load" />
+	<rosparam file="param/dwa_local_planner_params.yaml" command="load" />
+	<rosparam file="param/move_base_params.yaml" command="load" />
+	<rosparam file="param/navfn_global_planner_params.yaml" command="load" />
+    
+	<param name="global_costmap/global_frame" value="$(arg global_frame_id)"/>
+	<param name="global_costmap/robot_base_frame" value="$(arg base_frame_id)"/>
+	<param name="local_costmap/global_frame" value="$(arg odom_frame_id)"/>
+	<param name="local_costmap/robot_base_frame" value="$(arg base_frame_id)"/>
+	<param name="DWAPlannerROS/global_frame_id" value="$(arg odom_frame_id)"/>
+	<remap from="odom" to="$(arg odom_topic)"/>
+	<remap from="scan" to="$(arg laser_topic)"/>
+    </node>
+
+    <!--
+    <node pkg="dn_object_detect" type="dn_object_detect" name="dn_object_detect" output="screen">
+    	<param name="camera" type="str" value="/camera/rgb/image_rect_color"/>
+    	<param name="_image_transport" type="str" value="compressed"/>
+    	<param name="yolo_config" type="str" value="/home/adllo/catkin_ws/src/dn_object_detect/darknet/cfg/yolo-tiny_2_more.cfg"/>
+    	<param name="yolo_model" type="str" value="/home/adllo/catkin_ws/src/dn_object_detect/darknet/my_weights/yolo-tiny_2_more_final.weights"/>
+    </node>
+    -->
+
+    <node name="door_handle_RGBD_cropped_creator" pkg="door_detection" type="RGBD_cropped_creator"/>
+    <node name="door_handle_RGBD_method" pkg="door_detection" type="RGBD_method"/>
+    <node name="door_handle_PCL_method" pkg="door_detection" type="PCL_method"/>
+    <node name="door_handle_Final" pkg="door_detection" type="Final_handle"/>
+
+ 
+    <node name="rviz" pkg="rviz" type="rviz"/>
+
+</launch>

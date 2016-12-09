@@ -1,0 +1,5 @@
+SMR robot that detects doors, cabinets and drawers using a CNN (YOLO framework). Uses two methods to obtain the handles pointcloud, namely, RGBD_method and PCL_method and the fuses the data (Final_handle) to obtain a consistent estimate of the handle.
+
+Roslaunch display.launch
+
+Some packages or files might need some adjustment.

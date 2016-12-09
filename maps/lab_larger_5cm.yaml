@@ -1,0 +1,6 @@
+free_thresh: 0.196
+image: lab_larger_5cm.pgm
+negate: 0
+occupied_thresh: 0.65
+origin: [-14.699999999999996, -15.850000000000001, 0.0]
+resolution: 0.05
